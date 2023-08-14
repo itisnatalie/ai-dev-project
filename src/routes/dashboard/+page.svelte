@@ -1,16 +1,25 @@
 <script>
 	import { placeholder } from '$lib/store.js';
+	import { enhance } from '$app/forms';
 	export let form;
 	let url;
 	let count = 10;
+	let success = true;
 
 	$: array = form?.arrayOfUrls;
+	$: {
+		if (form && form.success) {
+			setTimeout(() => {
+				success = true;
+			}, 3000);
+		}
+	}
 </script>
 
-<section class="container mx-auto flex h-screen max-w-5xl flex-col">
+<section class="container mx-auto flex min-h-screen max-w-5xl flex-col">
 	<h2 class="mt-10 text-center text-3xl font-semibold text-slate-900">URL To scan</h2>
-	<div class="w-full rounded-xl bg-slate-300/60">
-		<form class="mx-auto mt-2 flex w-full gap-4 p-8" method="POST">
+	<div class="mt-4 w-full rounded-xl bg-slate-300/60">
+		<form class="mx-auto mt-2 flex w-full gap-4 p-8" method="POST" use:enhance>
 			<div class="flex w-full flex-col">
 				<label class="text-medium mb-2 font-medium" for="url">URL </label>
 				<input
@@ -24,7 +33,7 @@
 			</div>
 
 			<div class="flex flex-col">
-				<label for="count" class="mb-2 font-medium"> count</label>
+				<label for="count" class="mb-2 font-medium">count</label>
 				<input
 					id="count"
 					bind:value={count}
@@ -33,8 +42,15 @@
 					class="w-16 rounded-md border p-1"
 				/>
 			</div>
-			<button class="w-48 self-end rounded-md bg-slate-600 px-2 py-1 font-medium text-slate-100"
-				>Scan</button
+			<button
+				type="submit"
+				disabled={!success}
+				on:click={() => {
+					success = false;
+				}}
+				class={`${
+					success ? 'bg-slate-800' : ' bg-slate-800/50'
+				} w-48 self-end rounded-md px-2 py-1 font-medium text-slate-100`}>Scan</button
 			>
 		</form>
 		{#if array}
