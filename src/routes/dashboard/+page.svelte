@@ -3,11 +3,24 @@
 	import { enhance } from '$app/forms';
 	import Spinner from '$lib/components/Spinner.svelte';
 	export let form;
-	let url;
-	let count = 10;
-	let success;
+	let domain;
+	let success = false;
 
-	$: array = form?.arrayOfUrls;
+	$: {
+		if (form && form.success) {
+			success = true;
+			setTimeout(() => {
+				success = false;
+			}, 3000);
+		} else {
+			console.error('Failed to submit form');
+		}
+	}
+
+	$: crawlResult = form?.crawlResult;
+	$: {
+		console.log(crawlResult);
+	}
 </script>
 
 <section class="container mx-auto flex min-h-screen max-w-5xl flex-col">
@@ -26,18 +39,18 @@
 			}}
 		>
 			<div class="flex w-full flex-col">
-				<label class="text-medium mb-2 font-medium" for="url">URL </label>
+				<label class="text-medium mb-2 font-medium" for="domain">URL </label>
 				<input
-					id="url"
-					bind:value={url}
-					name="url"
+					id="domain"
+					bind:value={domain}
+					name="domain"
 					placeholder={$placeholder.url}
 					type="text"
 					class="rounded-md border p-1"
 				/>
 			</div>
 
-			<div class="flex flex-col">
+			<!-- <div class="flex flex-col">
 				<label for="count" class="mb-2 font-medium">count</label>
 				<input
 					id="count"
@@ -46,7 +59,7 @@
 					type="number"
 					class="w-16 rounded-md border p-1"
 				/>
-			</div>
+			</div> -->
 			<button
 				type="submit"
 				disabled={success}
@@ -58,9 +71,9 @@
 		{#if success}
 			<Spinner />
 		{/if}
-		{#if array}
+		{#if crawlResult && !success}
 			<ul class="m-4 overflow-hidden rounded-xl p-2">
-				{#each array as url, i}
+				{#each crawlResult.items as item, i}
 					<li
 						key={i}
 						class="mx-2 flex p-2
@@ -70,7 +83,7 @@
 							{i + 1 + '.'}
 						</p>
 						<p class="mr-2 w-full text-right">
-							{url}
+							{item.url}
 						</p>
 					</li>
 				{/each}
