@@ -64,7 +64,7 @@
 					<li
 						key={i}
 						class="mx-2 flex p-2
-						 text-lg text-slate-800 odd:bg-slate-300 odd:text-slate-900"
+						 text-lg odd:text-slate-800 even:bg-slate-300 even:text-slate-900"
 					>
 						<p>
 							{i + 1 + '.'}
