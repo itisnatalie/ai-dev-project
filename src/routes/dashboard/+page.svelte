@@ -1,25 +1,30 @@
 <script>
 	import { placeholder } from '$lib/store.js';
 	import { enhance } from '$app/forms';
+	import Spinner from '$lib/components/Spinner.svelte';
 	export let form;
 	let url;
 	let count = 10;
-	let success = true;
+	let success;
 
 	$: array = form?.arrayOfUrls;
-	$: {
-		if (form && form.success) {
-			setTimeout(() => {
-				success = true;
-			}, 3000);
-		}
-	}
 </script>
 
 <section class="container mx-auto flex min-h-screen max-w-5xl flex-col">
 	<h2 class="mt-10 text-center text-3xl font-semibold text-slate-900">URL To scan</h2>
 	<div class="mt-4 w-full rounded-xl bg-slate-300/60">
-		<form class="mx-auto mt-2 flex w-full gap-4 p-8" method="POST" use:enhance>
+		<form
+			class="mx-auto mt-2 flex w-full gap-4 p-8"
+			method="POST"
+			use:enhance={() => {
+				success = true;
+
+				return async ({ update }) => {
+					await update();
+					success = false;
+				};
+			}}
+		>
 			<div class="flex w-full flex-col">
 				<label class="text-medium mb-2 font-medium" for="url">URL </label>
 				<input
@@ -44,23 +49,22 @@
 			</div>
 			<button
 				type="submit"
-				disabled={!success}
-				on:click={() => {
-					success = false;
-				}}
+				disabled={success}
 				class={`${
-					success ? 'bg-slate-800' : ' bg-slate-800/50'
+					!success ? 'bg-slate-800' : ' bg-slate-800/50'
 				} w-48 self-end rounded-md px-2 py-1 font-medium text-slate-100`}>Scan</button
 			>
 		</form>
+		{#if success}
+			<Spinner />
+		{/if}
 		{#if array}
 			<ul class="m-4 overflow-hidden rounded-xl p-2">
 				{#each array as url, i}
 					<li
 						key={i}
-						class={`${
-							i % 2 ? 'bg-slate-300 text-slate-900' : 'text-slate-800'
-						} mx-2 flex p-2 text-lg`}
+						class="mx-2 flex p-2
+						 text-lg text-slate-800 odd:bg-slate-300 odd:text-slate-900"
 					>
 						<p>
 							{i + 1 + '.'}
