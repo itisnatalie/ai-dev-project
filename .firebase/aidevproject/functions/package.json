@@ -2,9 +2,6 @@
   "name": "scrapesvelter",
   "version": "0.0.1",
   "private": true,
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "type": "module",
   "dependencies": {
     "apify": "^3.1.8",
@@ -16,5 +13,8 @@
     "firebase-functions": "^4.3.0",
     "firebase-admin": "^11.0.1"
   },
-  "main": "server.js"
+  "main": "server.js",
+  "engines": {
+    "node": "18"
+  }
 }
