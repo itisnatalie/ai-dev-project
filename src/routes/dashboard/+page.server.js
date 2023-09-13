@@ -1,4 +1,4 @@
-import { initiateCrawler } from '$lib/server/crawler.js'
+import { initiateCrawler } from '../../lib/server/crawler'
 
 export const actions = {
   default: async ({ request }) => {

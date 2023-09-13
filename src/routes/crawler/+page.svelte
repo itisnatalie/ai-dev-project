@@ -15,6 +15,7 @@
 	}
 
 	$: crawlResult = form?.crawlResult;
+	$: issues = form?.issues;
 	$: isSuccess = form?.success;
 </script>
 
@@ -38,8 +39,10 @@
 
 	{#if crawlResult && isSuccess}
 		<p class="mb-4">Count: {crawlResult.items.length}</p>
+
 		{#each Object.keys(crawlResult.items) as item}
-			<div class="mb-4 flex w-full flex-col rounded-lg bg-slate-400/60 p-2 text-left shadow">
+			<!-- ACTUAL VALUES -->
+			<div class="mb-4 flex hidden w-full flex-col rounded-lg bg-slate-400/60 p-2 text-left shadow">
 				<!-- META -->
 				<p class="font-semiblod mb-3 text-slate-900"><code>{crawlResult.items[item].url}</code></p>
 				<p>Title:</p>
@@ -102,6 +105,31 @@
 						{crawlResult.items[item].data.schema}
 					</code>
 				</pre>
+			</div>
+		{/each}
+
+		<!-- FOUND ISSUES -->
+		{#each Object.entries(issues) as issue}
+			<code>issue</code>
+			<div class="mb-4 flex w-full flex-col rounded-lg bg-slate-400/60 p-2 text-left shadow">
+				<!-- META -->
+				<!-- <p class="mb-5 font-bold text-slate-900">{crawlResult.items[item].url}</p> -->
+				<!-- <pre><code>{issues}</code></pre> -->
+				{#if issue.meta.title}
+					<p class="font-semiblod mb-3 text-slate-900">{issue.meta.title}</p>
+				{/if}
+
+				{#if issue.meta.description}
+					<p class="font-semiblod mb-3 text-slate-900">{issue.meta.description}</p>
+				{/if}
+
+				{#if issue.meta.canonical}
+					<p class="font-semiblod mb-3 text-slate-900">{issue.meta.canonical}</p>
+				{/if}
+
+				{#if issue.meta.alternates}
+					<p class="font-semiblod mb-3 text-slate-900">{issue.meta.alternates}</p>
+				{/if}
 			</div>
 		{/each}
 	{:else if crawlResult && !isSuccess}
