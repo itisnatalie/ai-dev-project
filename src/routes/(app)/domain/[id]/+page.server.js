@@ -37,3 +37,12 @@ export const actions = {
 		// console.log(((endTime - startTime) / 1000).toFixed(2));
 	}
 };
+
+/** @type {import('./$types').PageServerLoad} 
+ * @returns {Promise} -
+*/
+export async function load({request}) {
+	let prefLanguage = request.headers.get('accept-language').split(',').at(0)
+	return {prefLanguage}
+	
+}

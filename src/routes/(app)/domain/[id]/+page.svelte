@@ -7,6 +7,8 @@
 	let datesRef = collection(firestore, `domain/${id}/dateofscan`);
 	let ordredQuery = query(datesRef, orderBy('id', 'desc'));
 	// const dates = collectionStore(firestore, ordredQuery);
+	export let data;
+	$: console.log(data.prefLanguage);
 </script>
 
 <section class="w-full">
@@ -59,7 +61,7 @@
 				<li class="flex w-full items-center p-2">
 					<p class="ml-4 w-8">{index + 1}.</p>
 					<p class="text-lg">
-						{Intl.DateTimeFormat('en-us', {
+						{Intl.DateTimeFormat(data.prefLanguage, {
 							year: 'numeric',
 							month: 'short',
 							day: 'numeric',
